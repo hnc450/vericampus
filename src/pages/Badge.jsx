@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Award, ShieldCheck, BadgeCheck, Check, Download, Link2, ExternalLink, Fingerprint, Lock } from 'lucide-react'
+import { Reveal } from '../components/Reveal.jsx'
 
 const IMG_DIPLOMA_TEX = "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=900&q=80"
 const IMG_CAMPUS = "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=900&q=80"
@@ -31,18 +32,20 @@ function QrSvg({size=150}){
 export default function Badge({ showToast }){
   return (
     <div className="space-y-6">
-      <div className="rounded-[24px] overflow-hidden border border-[#E9DDCB] relative h-[160px] shadow-sm">
-        <img src={IMG_DIPLOMA_TEX} alt="Texture diplôme VeriCampus" className="absolute inset-0 w-full h-full object-cover block"/>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1B1D3B]/90 via-[#1B1D3B]/70 to-[#1B1D3B]/30"/>
-        <div className="relative h-full flex items-center px-6 md:px-8 text-white">
-          <div><div className="inline-flex items-center gap-2 text-xs tracking-widest uppercase font-bold text-[#C9A86A] bg-white/10 border border-white/15 rounded-full px-3 py-1 backdrop-blur">VeriCampus • Badge officiel</div><h1 className="serif text-2xl md:text-3xl font-bold mt-2 drop-shadow">Badge QR vérifié</h1><p className="text-sm text-white/80">Preuve partageable • Scellée blockchain • Opposable</p></div>
-          <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=200&q=80" alt="Diplômé" className="hidden md:block ml-auto h-24 w-24 rounded-2xl object-cover border-4 border-white/20 shadow-xl block"/>
+      <Reveal>
+        <div className="rounded-[24px] overflow-hidden border border-[#E9DDCB] relative h-[160px] shadow-sm hover-lift">
+          <motion.img initial={{scale:1.08}} whileInView={{scale:1}} viewport={{once:true}} transition={{duration:1.2}} src={IMG_DIPLOMA_TEX} alt="Texture diplôme VeriCampus" className="absolute inset-0 w-full h-full object-cover block"/>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1B1D3B]/90 via-[#1B1D3B]/70 to-[#1B1D3B]/30"/>
+          <div className="relative h-full flex items-center px-6 md:px-8 text-white">
+            <div><div className="inline-flex items-center gap-2 text-xs tracking-widest uppercase font-bold text-[#C9A86A] bg-white/10 border border-white/15 rounded-full px-3 py-1 backdrop-blur">VeriCampus • Badge officiel</div><h1 className="serif text-2xl md:text-3xl font-bold mt-2 drop-shadow">Badge QR vérifié</h1><p className="text-sm text-white/80">Preuve partageable • Scellée blockchain • Opposable</p></div>
+            <motion.img initial={{opacity:0, scale:0.9}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=200&q=80" alt="Diplômé" className="hidden md:block ml-auto h-24 w-24 rounded-2xl object-cover border-4 border-white/20 shadow-xl block"/>
+          </div>
         </div>
-      </div>
+      </Reveal>
 
       <div className="flex flex-col lg:flex-row gap-6 items-start">
-        <div className="flex-1 w-full">
-          <div className="rounded-[28px] bg-white border border-[#E9DDCB] p-4 md:p-6 shadow-sm">
+        <Reveal className="flex-1 w-full">
+          <div className="rounded-[28px] bg-white border border-[#E9DDCB] p-4 md:p-6 shadow-sm hover-lift">
             <div className="flex items-center justify-between"><h2 className="serif font-bold flex items-center gap-2"><Award size={18} className="text-[#7A1C1C]"/> Badge vérifié — prévisualisation officielle</h2><span className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-[#E6F2EC] border border-[#B7DDC9] text-[#1B4A3A] px-3 py-1 text-xs font-bold shadow-sm"><BadgeCheck size={12}/> Sceau numérique</span></div>
 
             {/* Badge Officiel — forme FIXE, ne change pas au responsive : largeur 640px figée, scroll horizontal sur mobile */}
@@ -89,15 +92,15 @@ export default function Badge({ showToast }){
               <button onClick={()=>showToast('Partagé (simulé)')} className="inline-flex items-center gap-2 rounded-full bg-white border border-[#E9DDCB] px-5 py-3 text-sm font-medium hover:bg-[#F2EDE6]"><ExternalLink size={16}/> Partager</button>
             </div>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="w-full lg:w-[360px] space-y-4">
-          <div className="rounded-[24px] overflow-hidden border border-[#E9DDCB] shadow-sm">
-            <img src={IMG_CAMPUS} alt="Campus" className="h-28 w-full object-cover block"/>
+        <Reveal className="w-full lg:w-[360px] space-y-4">
+          <div className="rounded-[24px] overflow-hidden border border-[#E9DDCB] shadow-sm hover-lift">
+            <motion.img whileInView={{scale:1}} initial={{scale:1.06}} viewport={{once:true}} transition={{duration:1}} src={IMG_CAMPUS} alt="Campus" className="h-28 w-full object-cover block"/>
             <div className="bg-[#1B1D3B] text-white p-6"><h3 className="font-bold flex items-center gap-2"><Lock size={16} className="text-[#C9A86A]"/> Infalsifiable ?</h3><ul className="mt-4 grid gap-3 text-sm text-white/80"><li className="flex gap-2"><Check size={16} className="text-[#C9A86A] mt-0.5"/> SHA-256 ancré — toute modification invalide le hash.</li><li className="flex gap-2"><Check size={16} className="text-[#C9A86A] mt-0.5"/> QR signé — interroge la chaîne, pas une image.</li><li className="flex gap-2"><Check size={16} className="text-[#C9A86A] mt-0.5"/> Opposable : horodatage université + VeriCampus.</li></ul></div>
           </div>
-          <div className="rounded-[24px] bg-white border border-[#E9DDCB] p-6 shadow-sm"><h3 className="font-bold text-sm">Vérification croisée</h3><div className="mt-3 space-y-2 text-sm"><div className="flex justify-between"><span className="text-[#6B6575]">Registre UNIKIN</span><span className="font-semibold text-[#1B4A3A] flex items-center gap-1"><Check size={12}/> Trouvé</span></div><div className="flex justify-between"><span className="text-[#6B6575]">Blockchain</span><span className="font-semibold text-[#1B4A3A] flex items-center gap-1"><Check size={12}/> Confirmé</span></div><div className="flex justify-between"><span className="text-[#6B6575]">Signature</span><span className="font-semibold text-[#1B4A3A] flex items-center gap-1"><Check size={12}/> Valide</span></div></div><Link to="/verification" className="mt-4 block w-full text-center rounded-full border border-[#E9DDCB] bg-[#FFFBF5] py-2.5 text-sm font-semibold hover:bg-white">Vérifier un autre diplôme</Link></div>
-        </div>
+          <div className="rounded-[24px] bg-white border border-[#E9DDCB] p-6 shadow-sm hover-lift"><h3 className="font-bold text-sm">Vérification croisée</h3><div className="mt-3 space-y-2 text-sm"><div className="flex justify-between"><span className="text-[#6B6575]">Registre UNIKIN</span><span className="font-semibold text-[#1B4A3A] flex items-center gap-1"><Check size={12}/> Trouvé</span></div><div className="flex justify-between"><span className="text-[#6B6575]">Blockchain</span><span className="font-semibold text-[#1B4A3A] flex items-center gap-1"><Check size={12}/> Confirmé</span></div><div className="flex justify-between"><span className="text-[#6B6575]">Signature</span><span className="font-semibold text-[#1B4A3A] flex items-center gap-1"><Check size={12}/> Valide</span></div></div><Link to="/verification" className="mt-4 block w-full text-center rounded-full border border-[#E9DDCB] bg-[#FFFBF5] py-2.5 text-sm font-semibold hover:bg-white hover:scale-[1.02] transition">Vérifier un autre diplôme</Link></div>
+        </Reveal>
       </div>
     </div>
   )

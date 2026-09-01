@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { GraduationCap, BadgeCheck, Clock3, AlertTriangle, Search, UploadCloud, Loader2, Check, Fingerprint } from 'lucide-react'
 import { DIPLOMES, STATS_UNIV, statusConfig } from '../data/mock'
+import { Reveal, Stagger, StaggerItem } from '../components/Reveal.jsx'
 
 const IMG_CAMPUS = "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=900&q=80"
 
@@ -11,10 +13,11 @@ export default function Universite({ showToast }){
 
   return (
     <div className="space-y-6">
-      <div className="rounded-[24px] overflow-hidden border border-[#E9DDCB] relative">
-        <img src={IMG_CAMPUS} alt="Campus UNIKIN" className="absolute inset-0 w-full h-full object-cover"/>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1B1D3B]/90 via-[#1B1D3B]/70 to-[#1B1D3B]/20"/>
-        <div className="relative p-6 md:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-6 text-white">
+      <Reveal>
+        <div className="rounded-[24px] overflow-hidden border border-[#E9DDCB] relative hover-lift">
+          <motion.img initial={{scale:1.06}} whileInView={{scale:1}} viewport={{once:true}} transition={{duration:1.2}} src={IMG_CAMPUS} alt="Campus UNIKIN" className="absolute inset-0 w-full h-full object-cover"/>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1B1D3B]/90 via-[#1B1D3B]/70 to-[#1B1D3B]/20"/>
+          <div className="relative p-6 md:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-6 text-white">
           <div className="flex gap-4">
             <div className="h-14 w-14 rounded-2xl bg-white text-[#1B1D3B] flex items-center justify-center font-black shadow">UNIKIN</div>
             <div><div className="flex items-center gap-2"><h2 className="serif text-lg font-bold">Dashboard Université — UNIKIN</h2><span className="rounded-full bg-[#C9A86A] text-[#1B1D3B] px-2.5 py-1 text-xs font-bold">VeriCampus • vérifié</span></div><p className="text-sm text-white/75">Scolarité • Dernière synchro il y a 12 min • VeriCampus</p></div>
@@ -24,25 +27,29 @@ export default function Universite({ showToast }){
             <button onClick={()=>showToast('Clé API régénérée')} className="hidden md:inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur border border-white/15 px-4 py-3 text-sm"><Fingerprint size={16}/> Clé API</button>
           </div>
         </div>
-      </div>
-      {done && <div className="rounded-2xl bg-[#E6F2EC] border border-[#B7DDC9] text-[#1B4A3A] px-4 py-3 text-sm flex items-center gap-2"><Check size={16}/> Import terminé — 312 lignes validées • Ancrage en file d'attente.</div>}
+        </div>
+      </Reveal>
+      {done && <motion.div initial={{opacity:0, y:8}} animate={{opacity:1,y:0}} className="rounded-2xl bg-[#E6F2EC] border border-[#B7DDC9] text-[#1B4A3A] px-4 py-3 text-sm flex items-center gap-2"><Check size={16}/> Import terminé — 312 lignes validées • Ancrage en file d'attente.</motion.div>}
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <Stagger className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           {label:'Enregistrés', value:STATS_UNIV.total.toLocaleString('fr-FR'), sub:'Tous diplômes', icon:GraduationCap},
           {label:'Validés', value:STATS_UNIV.valides.toLocaleString('fr-FR'), sub:'Ancrage confirmé', icon:BadgeCheck},
           {label:'En attente', value:STATS_UNIV.attente, sub:'À ancrer', icon:Clock3},
           {label:'Anomalies', value:STATS_UNIV.anomalies, sub:'À corriger', icon:AlertTriangle},
         ].map(s=>(
-          <div key={s.label} className="rounded-[20px] bg-white border border-[#E9DDCB] p-5">
-            <div className="flex justify-between"><span className="text-xs tracking-widest uppercase font-bold text-[#6B6575]">{s.label}</span><span className="h-8 w-8 rounded-xl bg-[#F2EDE6] border border-[#E9DDCB] flex items-center justify-center"><s.icon size={14}/></span></div>
-            <div className="serif mt-2 text-2xl font-bold">{s.value}</div><div className="text-xs text-[#6B6575]">{s.sub}</div>
-          </div>
+          <StaggerItem key={s.label}>
+            <div className="rounded-[20px] bg-white border border-[#E9DDCB] p-5 hover-lift">
+              <div className="flex justify-between"><span className="text-xs tracking-widest uppercase font-bold text-[#6B6575]">{s.label}</span><span className="h-8 w-8 rounded-xl bg-[#F2EDE6] border border-[#E9DDCB] flex items-center justify-center animate-float"><s.icon size={14}/></span></div>
+              <div className="serif mt-2 text-2xl font-bold">{s.value}</div><div className="text-xs text-[#6B6575]">{s.sub}</div>
+            </div>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
 
-      <div className="rounded-[24px] bg-white border border-[#E9DDCB] overflow-hidden shadow-sm">
-        <div className="p-4 md:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E9DDCB]"><h3 className="font-bold text-sm md:text-base">Registre UNIKIN</h3><span className="self-start sm:self-auto text-xs rounded-full bg-[#F2EDE6] border border-[#E9DDCB] px-3 py-1.5 flex items-center gap-1 w-fit"><Search size={12}/> Filtrer • 6 sur 2 814</span></div>
+      <Reveal>
+        <div className="rounded-[24px] bg-white border border-[#E9DDCB] overflow-hidden shadow-sm hover-lift">
+          <div className="p-4 md:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E9DDCB]"><h3 className="font-bold text-sm md:text-base">Registre UNIKIN</h3><span className="self-start sm:self-auto text-xs rounded-full bg-[#F2EDE6] border border-[#E9DDCB] px-3 py-1.5 flex items-center gap-1 w-fit"><Search size={12}/> Filtrer • 6 sur 2 814</span></div>
         {/* Desktop */}
         <div className="hidden md:block overflow-x-auto scrollbar-none">
           <table className="w-full text-sm min-w-[760px]">
@@ -77,13 +84,16 @@ export default function Universite({ showToast }){
             )
           })}
         </div>
-      </div>
+        </div>
+      </Reveal>
 
-      <div className="rounded-[24px] border-2 border-dashed border-[#E9DDCB] bg-white p-6 flex flex-col md:flex-row items-center gap-6">
-        <div className="h-14 w-14 rounded-2xl bg-[#1B1D3B] text-[#C9A86A] flex items-center justify-center"><UploadCloud size={22}/></div>
-        <div className="flex-1"><div className="font-bold">Importer un palmarès (simulation front-only)</div><div className="text-sm text-[#6B6575]">XLSX/CSV — barre fictive, aucun upload réel.</div>{loading && <div className="mt-3 h-2 rounded-full bg-[#F2EDE6] overflow-hidden"><div className="h-full bg-[#C9A86A] w-[62%] animate-pulse"/></div>}</div>
-        <button onClick={handleImport} disabled={loading} className="rounded-full bg-[#1B1D3B] text-white px-6 py-3 text-sm font-bold">{loading?'Traitement…':'Choisir un fichier'}</button>
-      </div>
+      <Reveal>
+        <div className="rounded-[24px] border-2 border-dashed border-[#E9DDCB] bg-white p-6 flex flex-col md:flex-row items-center gap-6 hover-lift">
+          <div className="h-14 w-14 rounded-2xl bg-[#1B1D3B] text-[#C9A86A] flex items-center justify-center animate-float"><UploadCloud size={22}/></div>
+          <div className="flex-1"><div className="font-bold">Importer un palmarès (simulation front-only)</div><div className="text-sm text-[#6B6575]">XLSX/CSV — barre fictive, aucun upload réel.</div>{loading && <div className="mt-3 h-2 rounded-full bg-[#F2EDE6] overflow-hidden shimmer-bar"><div className="h-full bg-[#C9A86A] w-[62%]"/></div>}</div>
+          <motion.button whileHover={{scale:1.02}} whileTap={{scale:0.98}} onClick={handleImport} disabled={loading} className="rounded-full bg-[#1B1D3B] text-white px-6 py-3 text-sm font-bold shadow">{loading?'Traitement…':'Choisir un fichier'}</motion.button>
+        </div>
+      </Reveal>
     </div>
   )
 }

@@ -1,7 +1,14 @@
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { ShieldCheck, Search, Building2, LayoutDashboard, QrCode, LogIn, Menu, X, Shield } from 'lucide-react'
 import { useState } from 'react'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import { VeriCampusLogo } from './VeriCampusLogo.jsx'
+
+function ScrollProgress(){
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
+  return <motion.div className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#C9A86A] via-[#E7D1A0] to-[#7A1C1C] origin-left z-[60]" style={{ scaleX }} />
+}
 
 export function Header() {
   const [open, setOpen] = useState(false)
@@ -78,10 +85,11 @@ export function Footer(){
 export function Layout({ children, toast }){
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollProgress />
       <Header/>
       <main className="flex-1 mx-auto w-full max-w-[1240px] px-4 md:px-6 py-6 md:py-8">{children}</main>
       <Footer/>
-      {toast && <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#14131F] text-white px-5 py-3 rounded-full text-sm font-medium shadow-xl z-50 animate-slideUp">{toast}</div>}
+      {toast && <motion.div initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#14131F] text-white px-5 py-3 rounded-full text-sm font-medium shadow-xl z-50">{toast}</motion.div>}
     </div>
   )
 }
